@@ -20,13 +20,9 @@ import com.phamhuong.videoshortwithfirebase.R;
 
 public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, VideoFireBaseAdapter.MyHolder> {
 
-    private boolean isFav = false;
-
     public VideoFireBaseAdapter(@NonNull FirebaseRecyclerOptions<Video1Model> options) {
         super(options);
     }
-
-
 
     @NonNull
     @Override
@@ -43,6 +39,7 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         private TextView textVideoTitle;
         private TextView textVideoDescription;
         private ImageView imPerson, favorites, imShare, imMore;
+        private boolean isFav = false;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,12 +89,12 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         holder.favorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isFav) {
+                if (!holder.isFav) {
                     holder.favorites.setImageResource(R.drawable.ic_favorite);
-                    isFav = true;
+                    holder.isFav = true;
                 } else {
                     holder.favorites.setImageResource(R.drawable.ic_favorite);
-                    isFav = false;
+                    holder.isFav = false;
                 }
             }
         });

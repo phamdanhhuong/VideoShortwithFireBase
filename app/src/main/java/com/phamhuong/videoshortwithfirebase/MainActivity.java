@@ -1,6 +1,7 @@
 package com.phamhuong.videoshortwithfirebase;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager2;
     private VideoFireBaseAdapter videosAdapter;
+    private DatabaseReference mDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,19 +33,32 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         viewPager2 = findViewById(R.id.vpager);
+        initializeFirebase();
         getVideos();
     }
+
+    private void initializeFirebase() {
+        try {
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference("videos");
+            mDatabaseReference.keepSynced(true); // Enable offline persistence
+        } catch (Exception e) {
+            Toast.makeText(this, "Error initializing Firebase: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void getVideos() {
-        //**set database*/
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference("videos");
-        FirebaseRecyclerOptions<Video1Model> options =
-                new FirebaseRecyclerOptions.Builder<Video1Model>()
-                        .setQuery(mDatabaseReference, Video1Model.class)
-                        .build();
-        //**set adapter*/
-        videosAdapter = new VideoFireBaseAdapter(options);
-        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        viewPager2.setAdapter(videosAdapter);
+        try {
+            FirebaseRecyclerOptions<Video1Model> options =
+                    new FirebaseRecyclerOptions.Builder<Video1Model>()
+                            .setQuery(mDatabaseReference, Video1Model.class)
+                            .build();
+            
+            videosAdapter = new VideoFireBaseAdapter(options);
+            viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+            viewPager2.setAdapter(videosAdapter);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error loading videos: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

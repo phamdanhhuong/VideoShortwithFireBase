@@ -38,6 +38,7 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         private ProgressBar videoProgressBar;
         private TextView textVideoTitle;
         private TextView textVideoDescription;
+        private TextView textVideoEmail;
         private ImageView imPerson, favorites, imShare, imMore;
         private boolean isFav = false;
 
@@ -52,6 +53,7 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
             favorites = itemView.findViewById(R.id.favorites);
             imShare = itemView.findViewById(R.id.imShare);
             imMore = itemView.findViewById(R.id.imMore);
+            textVideoEmail = itemView.findViewById(R.id.tvEmailVideo);
         }
     }
     @Override
@@ -59,6 +61,7 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         //Video1Model videoModel = videoList.get(position); // Assuming videoList is not used here as data comes from Firebase
         holder.textVideoTitle.setText(model.getTitle());
         holder.textVideoDescription.setText(model.getDesc());
+        holder.textVideoEmail.setText(model.getEmail());
         //holder.videoView.setVideoPath(model.getVideoUrl());
         holder.videoView.setVideoURI(Uri.parse(model.getUrl()));
 

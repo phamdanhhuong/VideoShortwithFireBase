@@ -1,6 +1,10 @@
 package com.phamhuong.videoshortwithfirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +39,16 @@ public class MainActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.vpager);
         initializeFirebase();
         getVideos();
+
+
+        ImageButton btnUpload = findViewById(R.id.btnUpload);
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UploadActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeFirebase() {

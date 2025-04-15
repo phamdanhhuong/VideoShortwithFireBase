@@ -1,5 +1,6 @@
 package com.phamhuong.videoshortwithfirebase.Adpater;
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
 import com.phamhuong.videoshortwithfirebase.Model.Video1Model;
 import com.phamhuong.videoshortwithfirebase.R;
 
@@ -39,8 +41,9 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         private TextView textVideoTitle;
         private TextView textVideoDescription;
         private TextView textVideoEmail;
-        private ImageView imPerson, favorites, imShare, imMore;
-        private boolean isFav = false;
+        private TextView txtLikeCount;
+        private TextView txtDislikeCount;
+        private ImageView imPerson, favorites, imShare, imMore, dislike;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,16 +57,21 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
             imShare = itemView.findViewById(R.id.imShare);
             imMore = itemView.findViewById(R.id.imMore);
             textVideoEmail = itemView.findViewById(R.id.tvEmailVideo);
+            txtLikeCount = itemView.findViewById(R.id.txtLikeCount);
+            txtDislikeCount = itemView.findViewById(R.id.txtDislikeCount);
+            dislike = itemView.findViewById(R.id.dislike);
         }
     }
     @Override
-    protected void onBindViewHolder(@NonNull MyHolder holder, int position, @NonNull Video1Model model) {
+    protected void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position, @NonNull Video1Model model) {
         //Video1Model videoModel = videoList.get(position); // Assuming videoList is not used here as data comes from Firebase
         holder.textVideoTitle.setText(model.getTitle());
         holder.textVideoDescription.setText(model.getDesc());
         holder.textVideoEmail.setText(model.getEmail());
         //holder.videoView.setVideoPath(model.getVideoUrl());
         holder.videoView.setVideoURI(Uri.parse(model.getUrl()));
+        holder.txtLikeCount.setText(String.valueOf(model.getLike()));
+        holder.txtDislikeCount.setText(String.valueOf(model.getDislike()));
 
         holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -92,13 +100,18 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         holder.favorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!holder.isFav) {
-                    holder.favorites.setImageResource(R.drawable.ic_favorite);
-                    holder.isFav = true;
-                } else {
-                    holder.favorites.setImageResource(R.drawable.ic_favorite);
-                    holder.isFav = false;
-                }
+                DatabaseReference videoRef = getRef(position);
+                int newLike = model.getLike() + 1;
+                videoRef.child("like").setValue(newLike);
+            }
+        });
+
+        holder.dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference videoRef = getRef(position);
+                int newDislike = model.getDislike() + 1;
+                videoRef.child("dislike").setValue(newDislike);
             }
         });
     }

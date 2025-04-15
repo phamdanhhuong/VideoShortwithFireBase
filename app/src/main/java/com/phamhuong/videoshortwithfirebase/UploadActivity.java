@@ -67,7 +67,6 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkPermissionAndPickVideo();
-                UploadActivity.this.finish();
             }
         });
     }
@@ -104,6 +103,7 @@ public class UploadActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
                     Toast.makeText(this, "Upload thành công", Toast.LENGTH_SHORT).show();
+                    UploadActivity.this.finish();
                 });
 
             } catch (Exception e) {
@@ -124,6 +124,8 @@ public class UploadActivity extends AppCompatActivity {
         video.put("title", title);
         video.put("desc", desc);
         video.put("url", url);
+        video.put("like", 0);
+        video.put("dislike", 0);
         if (user != null) {
             video.put("uid", user.getUid());
             video.put("email",user.getEmail());

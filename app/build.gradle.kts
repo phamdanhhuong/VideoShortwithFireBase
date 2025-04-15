@@ -55,6 +55,6 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-database:8.0.1")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:22.3.0")
-    implementation("com.cloudinary:cloudinary-android:2.3.1")
+    implementation("com.cloudinary:cloudinary-android:3.0.2")
 
 }

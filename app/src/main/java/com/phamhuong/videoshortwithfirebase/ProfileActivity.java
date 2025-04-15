@@ -169,6 +169,8 @@ public class ProfileActivity extends AppCompatActivity {
             user.updateProfile(profileUpdates)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                            userRef.child("avatar").setValue(photoUrl);
                             Toast.makeText(ProfileActivity.this, "Avatar đã cập nhật!", Toast.LENGTH_SHORT).show();
                         }
                     });

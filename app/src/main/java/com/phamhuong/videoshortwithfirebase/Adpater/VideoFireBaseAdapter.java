@@ -9,14 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.phamhuong.videoshortwithfirebase.Model.Video1Model;
 import com.phamhuong.videoshortwithfirebase.R;
 
@@ -72,6 +78,27 @@ public class VideoFireBaseAdapter extends FirebaseRecyclerAdapter<Video1Model, V
         holder.videoView.setVideoURI(Uri.parse(model.getUrl()));
         holder.txtLikeCount.setText(String.valueOf(model.getLike()));
         holder.txtDislikeCount.setText(String.valueOf(model.getDislike()));
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(model.getUid());
+        userRef.child("avatar").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String avatarUrl = snapshot.getValue(String.class);
+                if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                    // Dùng avatarUrl để load ảnh, ví dụ với Glide:
+                    Glide.with(holder.imPerson.getContext()).load(avatarUrl).into(holder.imPerson);
+                } else {
+                    Glide.with(holder.imPerson.getContext()).load(R.drawable.ic_person_pin).into(holder.imPerson);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                
+            }
+        });
 
         holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override

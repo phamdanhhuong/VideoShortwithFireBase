@@ -8,6 +8,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/email"
+        android:inputType="textEmailAddress"
+        android:text="danhhuong246@gmail.com"
         android:hint="Email" />
 
     <EditText
@@ -15,6 +17,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:text="123456"
         android:inputType="textPassword"/>
 
     <Button
